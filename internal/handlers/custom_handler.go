@@ -9,5 +9,7 @@ func NewCustomHandler() Handler {
 }
 
 func (h customHandler) Handle(w http.ResponseWriter, r *http.Request) {
+	// logic of handler
+	w.Write([]byte("Hello"))
 
 }
