@@ -1,26 +1,14 @@
 package router
 
 import (
+	"github.com/devomccar/HackathonChatbot/internal/handlers"
 	"net/http"
-
-	"github.com/julienschmidt/httprouter"
 )
 
-type route struct {
-	router *httprouter.Router
-}
+type Router interface {
+	// HandlerFunc allows the usage of an http.HandlerFunc as a request handle
+	HandlerFunc(method string, path string, handler handlers.Handler)
 
-// New creates a new logger which uses zerolog in the backend
-func New() router.Router {
-	return route{
-		router: httprouter.New(),
-	}
-}
-
-func (r route) HandlerFunc(method, path string, handler handlers.Handler) {
-	r.router.HandlerFunc(method, path, handler.Handle)
-}
-
-func (r route) ServeHTTP(w http.ResponseWriter, req *http.Request) {
-	r.router.ServeHTTP(w, req)
+	// ServeHTTP allows the router to implement the http.Handler
+	ServeHTTP(http.ResponseWriter, *http.Request)
 }
