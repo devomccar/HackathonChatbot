@@ -2,15 +2,20 @@ package main
 
 import (
 	"fmt"
+	internalDb "github.com/devomccar/HackathonChatbot/internal/db"
 	internalHandler "github.com/devomccar/HackathonChatbot/internal/handlers"
 	internalRouter "github.com/devomccar/HackathonChatbot/internal/router"
+	"github.com/go-redis/redis"
 	"log"
 	"net/http"
 )
 
 func main() {
+	// get db
+	db := internalDb.NewRedis()
+
 	// get handlers
-	handlers := getHandlers()
+	handlers := getHandlers(db)
 
 	// get routes by passing in handler
 	router := internalRouter.New()
@@ -23,9 +28,9 @@ func main() {
 	}
 }
 
-func getHandlers() handlers {
+func getHandlers(db *redis.Client) handlers {
 	return handlers{
-		customHandler: internalHandler.NewCustomHandler(),
+		customHandler: internalHandler.NewCustomHandler(db),
 	}
 }
 
